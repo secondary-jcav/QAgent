@@ -1,28 +1,23 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, HTTPException, Request, Body
 from typing import Any
-from pydantic import BaseModel
-import asyncio
-import content_generator as bot
+import content_generator
 from dotenv import find_dotenv, load_dotenv
 
 app = FastAPI()
-doc = 'add-hero-component.html'
 _ = load_dotenv(find_dotenv())
-assistant = bot.ContentGenerator()
+assistant = content_generator.ContentGenerator()
 
 
-@app.post("/documentation/", status_code=201)
-def create_item(payload: Any = Body(None)):
-    # simulate some async operation, e.g., saving to a database
-    # await asyncio.sleep(1)  # This represents an async operation (e.g., I/O)
-    # result = {"name": item.name, "price": item.price}
-    # if item.tax:
-    #     result["price_with_tax"] = item.price + item.tax
-    # Run some other code here
+@app.post("/doc", status_code=201)
+async def send_programming_docs(payload: Any = Body(None)):
     # ...
-    print(payload)
-    response = assistant.get_openai_response(payload["doc"])
-    print(response)
+    try:
+        response = await assistant.get_openai_response(payload)
+        with open(f"result_file", "w") as test_file:
+            test_file.write(response)
+        return {"response": "results saved in file"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":

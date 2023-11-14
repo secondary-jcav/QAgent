@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Request, Body
+from fastapi import FastAPI, HTTPException, Body
+from datetime import datetime
 from typing import Any
 import content_generator
 from dotenv import find_dotenv, load_dotenv
@@ -12,8 +13,10 @@ assistant = content_generator.ContentGenerator()
 async def send_programming_docs(payload: Any = Body(None)):
     # ...
     try:
+        print("Sending request to GPT")
         response = await assistant.get_openai_response(payload)
-        with open(f"result_file", "w") as test_file:
+        current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
+        with open(f"Tests/{current_datetime}", "w") as test_file:
             test_file.write(response)
         return {"response": "results saved in file"}
     except Exception as e:

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This application is a FastAPI backend service designed to receive documents through a REST API endpoint and generate Cypress test cases using OpenAI's GPT-4 model. It's an ideal setup for automatically generating test cases for API and HTML documentation.
+This application is a FastAPI backend service designed to receive documents through a REST API endpoint on http://127.0.0.1:8000/doc and generate Cypress test cases using OpenAI's GPT-4 model. It's an ideal setup for automatically generating test cases for API and HTML documentation.
 
 ## Prerequisites
 
@@ -30,3 +30,6 @@ This application is a FastAPI backend service designed to receive documents thro
 3. **Containerization**
    
    Dockerfile is provided if you want to run the app in its own container
+   ```bash
+   docker build -t fastapi-app .
+   docker run -d --name myfastapiapp -p 8000:8000 -e OPENAI_API_KEY='Your-OpenAI-API-Key' -v $(pwd)/Tests:/usr/src/app/Tests fastapi-app

@@ -17,7 +17,6 @@ This application is a FastAPI backend service designed to receive documents thro
    git clone https://github.com/secondary-jcav/QAgent.git
    cd QAgent
    pip install -r requirements.txt
-   mkdir Tests
 
 2. **Local Execution**   
    Write your OpenAI key in the .env file.

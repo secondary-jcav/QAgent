@@ -1,0 +1,92 @@
+Sure, here are cypress tests based on the provided api documentation:
+
+**Test 1: Test `GET /pets` endpoint:**
+
+```javascript
+describe('GET /pets', () => {
+  it('Sucessfully get pets', () => {
+
+    // Arrange
+    const expectedBody = [{ name: 'Dog', tag: 'DogTag' }];
+
+    // Act
+    cy.request('/pets').as('response');
+
+    // Assert
+    cy.get('@response')
+      .should((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.deep.eq(expectedBody);
+      });
+  });
+});
+```
+
+**Test 2: Test `POST /pets` endpoint:**
+
+```javascript
+describe('POST /pets', () => {
+  it('Successfully creates a pet', () => {
+
+    // Arrange
+    const requestBody = { name: 'Dog', tag: 'DogTag' };
+    const expectedBody = { id: 1, name: 'Dog', tag: 'DogTag' };
+
+    // Act
+    cy.request('POST', '/pets', requestBody).as('response');
+
+    // Assert
+    cy.get('@response')
+      .should((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.deep.eq(expectedBody);
+      });
+  });
+});
+```
+
+**Test 3: Test `GET /pets/{id}` endpoint:**
+
+```javascript
+describe('GET /pets/{id}', () => {
+  it('Successfully retrieve a pet by id', () => {
+
+    // Arrange
+    const petId = 1;
+    const expectedBody = { id: 1, name: 'Dog', tag: 'DogTag' };
+
+    // Act
+    cy.request(`/pets/${petId}`).as('response');
+
+    // Assert
+    cy.get('@response')
+      .should((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.deep.eq(expectedBody);
+      });
+  });
+});
+```
+
+**Test 4: Test `DELETE /pets/{id}` endpoint:**
+
+```javascript
+describe('DELETE /pets/{id}', () => {
+  it('Successfully delete a pet by id', () => {
+
+    // Arrange
+    const petId = 2;
+
+    // Act
+    cy.request('DELETE', `/pets/${petId}`).as('response');
+
+    // Assert
+    cy.get('@response')
+      .should((response) => {
+        expect(response.status).to.eq(204);
+      });
+  });
+});
+```
+
+Please replace the expected data and url with the real data and url for your application. These tests will ensure all endpoints of pet api are working as expected.

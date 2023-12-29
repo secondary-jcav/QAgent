@@ -2,11 +2,18 @@
 
 ## Introduction
 
-This application is a FastAPI backend service designed to receive documents through a REST API endpoint on http://127.0.0.1:8000/doc and generate Cypress test cases using OpenAI's GPT-4 model. It's an ideal setup for automatically generating test cases for API and HTML documentation.
+This application is a FastAPI backend service designed to receive your app's html or API definition through a REST API endpoint on http://127.0.0.1:8000/doc and generate Cypress test cases using OpenAI's GPT-4 model. The prompt is defined in content_generator.py
+
+```
+"You're an expert software engineer. You receive program documentation and provide Cypress tests to validate it" \
+                      "If you receive an API doc in the OpenAPI standard, you will provide functional API tests using cypress that cover all the endpoints detailed in the API doc." \
+                      "If you receive an html, you will provide E2E cypress tests that cover the locators and attributes present in the file." \
+                      "It's important that your response covers every endpoint or selector describen in the documentation you receive"
+```
 
 ## Prerequisites
 
-- Docker
+- Docker (optional)
 - An OpenAI API key
 
 ## Installation

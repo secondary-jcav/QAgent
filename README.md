@@ -30,5 +30,5 @@ This application is a FastAPI backend service designed to receive documents thro
    
    Dockerfile is provided if you want to run the app in its own container
    ```bash
-   docker build -t fastapi-app .
-   docker run -d --name myfastapiapp -p 8000:8000 -e OPENAI_API_KEY='Your-OpenAI-API-Key' -v $(pwd)/Tests:/usr/src/app/Tests fastapi-app
+   docker build -t qa-agent .
+   docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY='Your-OpenAI-API-Key' -v $(pwd)/Tests:/usr/src/app/Tests qa-agent

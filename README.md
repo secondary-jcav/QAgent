@@ -39,3 +39,8 @@ This application is a FastAPI backend service designed to receive your app's htm
    ```bash
    docker build -t qa-agent .
    docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY='Your-OpenAI-API-Key' -v $(pwd)/Tests:/usr/src/app/Tests qa-agent
+
+
+## Using the application
+
+There's a sample `petstore_simple.json` file with an API definition you can send to `http://127.0.0.1:8000/doc` to test the app has been deployed correctly. Generated tests should be stored in the /Tests folder.

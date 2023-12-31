@@ -1,0 +1,56 @@
+Based on the received OpenAPI documentation, the cypress tests for functional API testing would be as follows:
+
+1. Test to GET all pets:
+
+```javascript
+it('It should GET all the pets', () => {
+  cy.request('GET', 'http://petstore.swagger.io/api/pets').then(response => {
+    expect(response.status).to.eq(200);
+    expect(response.body).to.be.a('array');
+  });
+});
+```
+
+2. Test to POST and create a new pet:
+
+```javascript
+it('It should POST a new pet', () => {
+  const newPet = {
+    "name": "Fluffy",
+    "tag": "Dog"
+  };
+  cy.request('POST', 'http://petstore.swagger.io/api/pets', newPet).then(
+    (response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body.name).eq('Fluffy');
+        expect(response.body.tag).eq('Dog');
+    },
+  );
+});
+```
+
+3. Test to GET a existing pet using id:
+
+```javascript
+it('It should GET a pet by id', () => {
+  cy.request('GET', 'http://petstore.swagger.io/api/pets/1').then(response => {
+    expect(response.status).to.eq(200);
+    expect(response.body).to.be.a('object');
+    expect(response.body.id).eq(1);
+  });
+});
+```
+
+4. Test to DELETE a pet using id:
+
+```javascript
+it('It should DELETE a pet by id', () => {
+  cy.request('DELETE', 'http://petstore.swagger.io/api/pets/1').then(response => {
+    expect(response.status).to.eq(204);
+  });
+});
+```
+
+Please replace "http://petstore.swagger.io/api" with your actual server and base URL if they are different. Also, replace '/1' with the actual id of the created pet during testing. 
+
+Please also note that these tests require your server to be running and configured correctly to pass the tests.

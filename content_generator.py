@@ -1,11 +1,12 @@
 from openai import AsyncOpenAI
-
+from dotenv import find_dotenv, load_dotenv
 
 # gets API Key from environment variable OPENAI_API_KEY
 
 
 class ContentGenerator:
     def __init__(self):
+        _ = load_dotenv(find_dotenv())
         self.client = AsyncOpenAI()
 
     async def get_openai_response(self, prompt, framework):

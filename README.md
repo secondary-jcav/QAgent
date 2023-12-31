@@ -13,8 +13,8 @@ system_role = f"You're an expert software engineer. You receive program document
 
 ## Prerequisites
 
-- Docker (optional)
 - An OpenAI API key
+- Docker (optional)
 
 ## Installation
 
@@ -34,16 +34,16 @@ system_role = f"You're an expert software engineer. You receive program document
    Dockerfile is provided if you want to run the app in its own container
    ```bash
    docker build -t qa-agent .
-   docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY='Your-OpenAI-API-Key' -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
+   docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY=Your-OpenAI-API-Key -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
 
 
 ## Using the application
  Send the documentation you want to base the tests on to the
-   `/generate` endpoint on port 8000. They will be saved in the /GPT_GENERATED_CONTENT folder
+   `/generate` endpoint on port 8000. Response will be saved in the /GPT_GENERATED_CONTENT folder
 
 The default framework is cypress. You can change this to playwright or selenium with the `/framework` endpoint
 ```
 {"framework":"playwright"}
 ```
 
-There's a sample `petstore_simple.json` file with an API definition you can send to `http://127.0.0.1:8000/doc` to test the app has been deployed correctly. Generated tests should be stored in the /GPT_GENERATED_CONTENT folder.
+There's a sample `petstore_simple.json` file with an API definition you can send to `http://127.0.0.1:8000/generate` to confirm the app has been deployed correctly. Tests should be stored in the /GPT_GENERATED_CONTENT folder.

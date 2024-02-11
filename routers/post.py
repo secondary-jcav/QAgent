@@ -34,7 +34,7 @@ async def send_programming_docs(payload: Any = Body(None)):
             raise ValueError("Invalid framework value. Must be 'cypress', 'playwright', or 'selenium'.")
 
         print(f"Sending request to GPT for {stored_framework} tests")
-        response = await assistant.get_openai_response(payload, stored_framework)
+        response = await assistant.write_test(payload, stored_framework)
         print("writing response to /GPT_GENERATED_CONTENT")
 
         current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")

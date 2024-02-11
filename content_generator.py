@@ -9,7 +9,7 @@ class ContentGenerator:
         _ = load_dotenv(find_dotenv())
         self.client = AsyncOpenAI()
 
-    async def get_openai_response(self, prompt, framework):
+    async def write_test(self, prompt, framework) -> str:
         """
         Get a response from OpenAI's API.
         """

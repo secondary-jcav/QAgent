@@ -1,12 +1,13 @@
 from openai import AsyncOpenAI
-from dotenv import find_dotenv, load_dotenv
+from base.base_class import BaseClass
+
 
 # gets API Key from environment variable OPENAI_API_KEY
 
 
-class ContentGenerator:
+class TestWriter(BaseClass):
     def __init__(self):
-        _ = load_dotenv(find_dotenv())
+        super().__init__()
         self.client = AsyncOpenAI()
 
     async def write_test(self, prompt, framework) -> str:

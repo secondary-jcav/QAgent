@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Body, HTTPException
-from typing import Any
-from pydantic import BaseModel, validator
-import content_generator
 from datetime import datetime
+from fastapi import APIRouter, Body, HTTPException
+from pydantic import BaseModel, validator
+from typing import Any
+from llm.test_writer import TestWriter
+
 
 router = APIRouter()
-assistant = content_generator.ContentGenerator()
+assistant = TestWriter()
 stored_framework = "cypress"  # default value
 
 

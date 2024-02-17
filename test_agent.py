@@ -1,16 +1,14 @@
 import asyncio
-import content_generator
-from dotenv import find_dotenv, load_dotenv
+from llm.test_writer import TestWriter
 
 # Tests basic functionality
-_ = load_dotenv(find_dotenv())
-assistant = content_generator.ContentGenerator()
+assistant = TestWriter()
 
 FILE_SAMPLE = 'petstore_simple.json'
 
 with open(FILE_SAMPLE, 'r') as file:
     data = file.read()
-    tests = asyncio.run(assistant.get_openai_response(data, "cypress"))
+    tests = asyncio.run(assistant.write_test(data, "cypress"))
     assert "describe" in tests
     assert "it" in tests
     print(tests)

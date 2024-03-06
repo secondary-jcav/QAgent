@@ -40,28 +40,33 @@ class GithubClient(BaseClass):
                 print(f"Failed to retrieve commits: Status code: {query.status}")
         return sha_list
 
-    async def get_commit_info(self, commit_sha: str):
+    async def get_commit_info(self, commit_sha: str) -> str:
         """
         From a commit identifier, get all associated files and their changes.
         :param commit_sha: commit identifier
-        :return: None
+        :return: Content as a string instead of writing to a file
         """
         url = f'https://api.github.com/repos/{self.username}/{self.repo}/commits/{commit_sha}'
+        content = ""
         async with self.session.get(url) as query:
             if query.status == 200:
                 text = await query.text()
                 commit_data = json.loads(text)
-                with open("changes.txt", "a") as f:
-                    f.write(f"Commit id:{commit_sha}\n")
-                    f.write(f"Commit message: {commit_data['commit']['message']}\n")
-                    for file in commit_data['files']:
-                        f.write(f"File: {file['filename']}\n")
-                        f.write(f"Additions: {file['additions']}\n")
-                        f.write(f"Deletions: {file['deletions']}\n")
-                        f.write(f"Changes: {file['changes']}\n")
-                        f.write(f"Patch: {file['patch']}\n")
+                content += f"Commit id:{commit_sha}\n"
+                content += f"Commit message: {commit_data['commit']['message']}\n"
+                for file in commit_data['files']:
+                    content += f"File: {file['filename']}\n"
+                    content += f"Additions: {file['additions']}\n"
+                    content += f"Deletions: {file['deletions']}\n"
+                    content += f"Changes: {file['changes']}\n"
+                    if 'patch' in file:
+                        content += f"Patch: {file['patch']}\n"
+                    else:
+                        content += "Patch: Not available\n"
             else:
                 print(f"Failed to retrieve commit data. Status code: {query.status}")
+                return ""
+        return content
 
     @staticmethod
     def get_timestamp(days: int = 1) -> dict:

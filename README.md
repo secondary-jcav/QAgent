@@ -38,7 +38,9 @@ system_role = f"You're an expert software engineer. You receive program document
 
 
 ## Using the application
- Send the documentation you want to base the tests on to the
+**Writing test cases**
+
+1. Send the documentation you want to base the tests on to the
    `/generate` endpoint on port 8000. Response will be saved in the /GPT_GENERATED_CONTENT folder
 
 The default framework is cypress. You can change this to playwright or selenium with the `/framework` endpoint
@@ -47,3 +49,16 @@ The default framework is cypress. You can change this to playwright or selenium 
 ```
 
 There's a sample `petstore_simple.json` file with an API definition you can send to `http://127.0.0.1:8000/generate` to confirm the app has been deployed correctly. Tests should be stored in the /GPT_GENERATED_CONTENT folder.
+
+**Checking for breaking commits**
+
+1. Set the env variables GIT_USER & GIT_REPO
+2. Send a test report in text format to the `/analyze` endpoint
+
+```
+curl -X POST -F "file=@output.txt" "http://127.0.0.1:8000/analyze?days=21"
+```
+The `days`param is how far back you want to check the repo. Default is 1 (changes in the last 24 hours)
+
+App will compare the test report with the information it got from GitHub, and point out
+breaking changes. Note that there may be rate limiting on GitHub's part

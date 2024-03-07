@@ -30,5 +30,5 @@ class ReportChecker(BaseClass):
         index = VectorStoreIndex.from_documents([changes, report])
         query_engine = index.as_query_engine()
         response = query_engine.query(prompt)
-        return response
+        return str(response)
 

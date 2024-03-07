@@ -36,12 +36,16 @@ async def store_framework(framework: FrameworkModel):
 
 
 @router.post("/generate", status_code=201)
-async def send_programming_docs(payload: Any = Body(None)):
+async def send_programming_docs(file: UploadFile = File(...)):
     # Send documentation to LLM endpoint to generate test cases
+    if file.content_type != 'text/plain':
+        return JSONResponse(status_code=400, content={"message": "This endpoint only accepts text/plain files."})
+
     try:
         if stored_framework is None:
             raise ValueError("Invalid framework value. Must be 'cypress', 'playwright', or 'selenium'.")
-
+        content = await file.read()
+        payload = content.decode("utf-8")
         print(f"Sending request to GPT for {stored_framework} tests")
         response = await test_writer.write_test(payload, stored_framework)
         print("writing response to /GPT_GENERATED_CONTENT")

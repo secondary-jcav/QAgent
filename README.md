@@ -43,12 +43,16 @@ system_role = f"You're an expert software engineer. You receive program document
 1. Send the documentation you want to base the tests on to the
    `/generate` endpoint on port 8000. Response will be saved in the /GPT_GENERATED_CONTENT folder
 
+```
+curl -X POST -F "file=@petstore_sample.txt" "http://127.0.0.1:8000/generate"
+```
+
 The default framework is cypress. You can change this to playwright or selenium with the `/framework` endpoint
 ```
 {"framework":"playwright"}
 ```
 
-There's a sample `petstore_simple.json` file with an API definition you can send to `http://127.0.0.1:8000/generate` to confirm the app has been deployed correctly. Tests should be stored in the /GPT_GENERATED_CONTENT folder.
+There's a sample `petstore_sample.txt` file with an API definition you can send to `http://127.0.0.1:8000/generate` to confirm the app has been deployed correctly. Tests should be stored in the /GPT_GENERATED_CONTENT folder.
 
 **Checking for breaking commits**
 

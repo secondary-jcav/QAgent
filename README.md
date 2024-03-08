@@ -1,15 +1,11 @@
-# Test Writing Assistant (FastAPI Application with OpenAI Integration)
+# SW QA Assistant (FastAPI Application with LLM Integration)
 
 ## Introduction
 
-This application is a FastAPI backend service designed to receive your app's html or API definition through a REST API endpoint on http://127.0.0.1:8000/generate and output automated test cases using OpenAI's GPT-4 model. The prompt is defined in content_generator.py. You can choose between cypress, playwright or selenium.
-
-```
-system_role = f"You're an expert software engineer. You receive program documentation and provide {framework} tests to validate it" \
-                      f"If you receive an API doc in the OpenAPI standard, you will provide functional API tests using {framework} that cover all the endpoints detailed in the API doc." \
-                      f"If you receive an html, you will provide E2E {framework} tests that cover the locators and attributes present in the file." \
-                      f"It's important that your response covers every endpoint or selector describen in the documentation you receive"
-```
+This application is a FastAPI backend service that you communicate with through REST API endpoints at `http://127.0.0.1:8000`
+1) `/generate` endpoint will write test cases based on the documentation you send it (e.g. API definition or a page's html)
+2) By default, those tests are written using cypress. You can change that to playwright or selenium with a POST to `/framework`
+3) When tests fail, find clues on breaking commits by sending a txt test report to `/analyze`. Requires that your code is hosted on github
 
 ## Prerequisites
 
@@ -26,7 +22,7 @@ system_role = f"You're an expert software engineer. You receive program document
    pip install -r requirements.txt
 
 2. **Local Execution**   
-   Write your OpenAI key in the .env file.
+   Fill out your env variables in the .env file. An OpenAI key is mandatory.
    You can run the application from the main.py file.
 
 3. **Containerization**
@@ -34,7 +30,7 @@ system_role = f"You're an expert software engineer. You receive program document
    Dockerfile is provided if you want to run the app in its own container
    ```bash
    docker build -t qa-agent .
-   docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY=Your-OpenAI-API-Key -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
+   docker run -d --name agent -p 8000:8000 --env-file .env  -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
 
 
 ## Using the application

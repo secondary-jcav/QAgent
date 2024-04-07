@@ -4,7 +4,7 @@ from llm.test_writer import TestWriter
 # Tests basic functionality
 assistant = TestWriter()
 
-FILE_SAMPLE = 'petstore_simple.json'
+FILE_SAMPLE = 'petstore_sample.txt'
 
 with open(FILE_SAMPLE, 'r') as file:
     data = file.read()

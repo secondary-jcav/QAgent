@@ -1,15 +1,11 @@
-# Test Writing Assistant (FastAPI Application with OpenAI Integration)
+# SW QA Assistant (FastAPI Application with LLM Integration)
 
 ## Introduction
 
-This application is a FastAPI backend service designed to receive your app's html or API definition through a REST API endpoint on http://127.0.0.1:8000/generate and output automated test cases using OpenAI's GPT-4 model. The prompt is defined in content_generator.py. You can choose between cypress, playwright or selenium.
-
-```
-system_role = f"You're an expert software engineer. You receive program documentation and provide {framework} tests to validate it" \
-                      f"If you receive an API doc in the OpenAPI standard, you will provide functional API tests using {framework} that cover all the endpoints detailed in the API doc." \
-                      f"If you receive an html, you will provide E2E {framework} tests that cover the locators and attributes present in the file." \
-                      f"It's important that your response covers every endpoint or selector describen in the documentation you receive"
-```
+This application is a FastAPI backend service that you communicate with through REST API endpoints at `http://127.0.0.1:8000`
+1) `/generate` endpoint will write test cases based on the documentation you send it (e.g. API definition or a page's html)
+2) By default, those tests are written using cypress. You can change that to playwright or selenium with a POST to `/framework`
+3) When tests fail, find clues on breaking commits by sending a txt test report to `/analyze`. Requires that your code is hosted on GitHub.
 
 ## Prerequisites
 
@@ -26,7 +22,7 @@ system_role = f"You're an expert software engineer. You receive program document
    pip install -r requirements.txt
 
 2. **Local Execution**   
-   Write your OpenAI key in the .env file.
+   Fill out your env variables in the .env file. An OpenAI key is mandatory.
    You can run the application from the main.py file.
 
 3. **Containerization**
@@ -34,14 +30,14 @@ system_role = f"You're an expert software engineer. You receive program document
    Dockerfile is provided if you want to run the app in its own container
    ```bash
    docker build -t qa-agent .
-   docker run -d --name testwriter -p 8000:8000 -e OPENAI_API_KEY=Your-OpenAI-API-Key -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
+   docker run -d --name agent -p 8000:8000 --env-file .env  -v $(pwd)/GPT_GENERATED_CONTENT:/usr/src/app/GPT_GENERATED_CONTENT qa-agent
 
 
 ## Using the application
 **Writing test cases**
 
 1. Send the documentation you want to base the tests on to the
-   `/generate` endpoint on port 8000. Response will be saved in the /GPT_GENERATED_CONTENT folder
+   `/generate` endpoint on port 8000. Response will be saved in the /GPT_GENERATED_CONTENT folder. Example:
 
 ```
 curl -X POST -F "file=@petstore_sample.txt" "http://127.0.0.1:8000/generate"
@@ -52,12 +48,11 @@ The default framework is cypress. You can change this to playwright or selenium 
 {"framework":"playwright"}
 ```
 
-There's a sample `petstore_sample.txt` file with an API definition you can send to `http://127.0.0.1:8000/generate` to confirm the app has been deployed correctly. Tests should be stored in the /GPT_GENERATED_CONTENT folder.
 
 **Checking for breaking commits**
 
 1. Set the env variables GIT_USER & GIT_REPO
-2. Send a test report in text format to the `/analyze` endpoint
+2. Send a test report in text format to the `/analyze` endpoint. Example:
 
 ```
 curl -X POST -F "file=@output.txt" "http://127.0.0.1:8000/analyze?days=21"
@@ -65,4 +60,4 @@ curl -X POST -F "file=@output.txt" "http://127.0.0.1:8000/analyze?days=21"
 The `days`param is how far back you want to check the repo. Default is 1 (changes in the last 24 hours)
 
 App will compare the test report with the information it got from GitHub, and point out
-breaking changes. Note that there may be rate limiting on GitHub's part
+breaking changes. Note that there may be rate limiting on GitHub's part.

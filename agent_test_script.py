@@ -1,5 +1,5 @@
 import asyncio
-from llm.test_writer import TestWriter
+from llm.writer import TestWriter
 
 # Tests basic functionality
 assistant = TestWriter()

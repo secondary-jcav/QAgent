@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, validator
 from typing import Any
 from github.github_client import GithubClient
-from llm.test_writer import TestWriter
+from llm.writer import TestWriter
 from llm.bug_finder import ReportChecker
 
 
